@@ -29,10 +29,10 @@ export type InputType = "checklist" | "quantitative";
 
 /**
  * How raw input becomes performance (derived from input type + frequency):
- * - daily_check:     checklist/day — completed days / recorded days
- * - frequency:       checklist/week|month — completed occurrences / target (prorated to eligible days)
- * - daily_threshold: quantitative/day — days at or above target / recorded days
- * - sum:             quantitative/week|month — accumulated total / target (prorated to eligible days)
+ * - daily_check:     checklist/day — completed days / eligible (elapsed) days
+ * - frequency:       checklist/week|month — completed occurrences / full period target
+ * - daily_threshold: quantitative/day — days at or above target / eligible (elapsed) days
+ * - sum:             quantitative/week|month — accumulated total / full period target
  */
 export type ScoringMode = "daily_check" | "frequency" | "daily_threshold" | "sum";
 
