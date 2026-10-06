@@ -17,3 +17,4 @@
 - Pages render client-side only (AppShell mount gate) because they depend on local date and localStorage.
 - `noUncheckedIndexedAccess` is off: config lookups by known IDs made it pure noise.
 - Cat mascot state comes only from `resolveCatState()` in `src/lib/branding/catStates.ts`, fed by the existing Life Score (current week); `AwwabCat` maps five states to normalized illustration assets, shared with the dynamic favicon to keep branding consistent.
+- Supabase client is pinned to the AwwabHome backend via src/integrations/supabase/awwab-backend.ts; the user chose to share that database across projects. Schema changes are made in the Home Hub project.
