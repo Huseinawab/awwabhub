@@ -74,7 +74,7 @@ function ReviewPage() {
       <section className="surface-strong grid gap-6 p-6 sm:grid-cols-3">
         <div>
           <p className="text-caption">{t("life.label")}</p>
-          <p className="text-display mt-1 !text-6xl">{c.current.lifeScore === null ? "—" : fmtScore(c.current.lifeScore)}</p>
+          <p className="text-display mt-1 !text-6xl">{c.current.lifeScore === null ? "0" : fmtScore(c.current.lifeScore)}</p>
           {c.current.lifeScore === null && <p className="text-sm text-muted-foreground">{t("common.notEnough")}</p>}
         </div>
         <div>
