@@ -64,12 +64,12 @@ describe("calculation engine", () => {
     const r = computePeriod(week, e("2026-09-07", "reading", { completed: true }), "2026-09-07");
     expect(r.lifeScore).toBe(5); // 100% × 50% × 10%
   });
-  it("only health at 50% → Life Score 10", () => {
+  it("only one domain has data → only its weighted share counts", () => {
     const days = ["07", "08", "09", "10", "11", "12", "13"].map((d) => `2026-09-${d}`);
     const x = merge(
       ...days.flatMap((d, i) => [e(d, "fruit_veg", { completed: i < 7 }), e(d, "daily_steps", { value: 9000 })]),
     );
-    // fruit 100% × 20 + steps 100% × 20 = 40% health; adjust with protein 120g on all days → +30 → 70; gym none.
+    // fruit 100% × 20 + steps 100% × 20 = 40% demonstrated health; × 20% domain weight = 8 points.
     expect(computePeriod(week, x, after).domains.health).toBe(40);
     expect(computePeriod(week, x, after).lifeScore).toBe(8);
   });
