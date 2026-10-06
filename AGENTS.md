@@ -11,6 +11,7 @@
 
 ## AWWAB architecture
 - All scoring formulas live in `src/lib/awwab/calc.ts` (pure functions); UI never computes scores — single source of truth per spec.
+- Life Score is a non-renormalized sum (domain weight × activity weight × performance), starting at 0; missing data adds 0 but is never a failure, so sparse data cannot inflate it. The progress chart uses `lifeScoreAsOf` (rolling 7 days, entries on/before the date) so later entries never rewrite past days.
 - Activity/domain config (`src/lib/awwab/config.ts`) is the only place targets and weights are defined; targets are versioned by `effectiveFrom` so history won't silently change.
 - Data persists locally via `src/lib/awwab/store.ts` (raw input only: null = no data, false = not done, 0 = zero); when signed in, `sync.ts` mirrors the whole state as one JSON row per user in `user_state` (account wins on sign-in) — simplest way to keep progress across devices.
 - Insights are deterministic (`insights.ts`), never AI.

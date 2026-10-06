@@ -10,36 +10,29 @@ import { Bar, CatIllustration, TrendChip, fmtScore } from "./ui";
 export function LifeScoreBlock({ c, prevLabel }: { c: Comparison; prevLabel: string }) {
   const t = useT();
   const score = c.current.lifeScore;
-  if (score === null)
-    return (
-      <section className="surface-strong grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 p-6 sm:p-8">
-        <div className="min-w-0">
-          <p className="text-caption">{t("life.label")}</p>
-          <p className="text-h1 mt-2">{t("common.notEnoughShort")}</p>
-          <p className="mt-2 max-w-md text-sm text-muted-foreground">{t("life.noneBody")}</p>
-        </div>
-        <CatIllustration state="steady" className="h-28 w-28 shrink-0 sm:h-36 sm:w-36" />
-      </section>
-    );
+  const none = score === null;
   return (
     <section className="surface-strong grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 p-6 sm:p-8">
       <div className="min-w-0">
         <p className="text-caption">{t("life.label")}</p>
-        <p className="text-display mt-2">{fmtScore(score)}</p>
+        <p className="text-display mt-2">{none ? "0" : fmtScore(score)}</p>
         <div className="mt-3 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-          {c.life ? (
+          {none ? (
+            <span>{t("life.noData")}</span>
+          ) : c.life ? (
             <>
               <TrendChip t={c.life} /> <span>{t("life.vs", { prev: prevLabel })} · {t(`trend.${c.life.dir}`)}</span>
             </>
           ) : (
-            <span>{t("life.noPrev")}</span>
+            <span>{t("life.notComparable")}</span>
           )}
         </div>
-        <p className="mt-3 text-xs text-muted-foreground">
-          {t("life.basedOn", { n: c.current.recordedActivities, total: c.current.list.length })}
+        <p className="mt-3 max-w-md text-xs text-muted-foreground">
+          {none ? t("life.noneBody") : c.current.dataState === "LIMITED_DATA" ? t("life.building") : t("life.basedOn", { n: c.current.recordedActivities, total: c.current.list.length })}
         </p>
+        <p className="mt-1 text-xs text-muted-foreground">{t("life.coverage", { n: Math.round(c.current.coverage) })}</p>
       </div>
-      <CatIllustration state={resolveCatState(score)} className="h-28 w-28 shrink-0 sm:h-36 sm:w-36" />
+      <CatIllustration state={none ? "steady" : resolveCatState(score)} className="h-28 w-28 shrink-0 sm:h-36 sm:w-36" />
     </section>
   );
 }
@@ -51,9 +44,9 @@ function activityDetail(r: ActivityResult, kind: string, unit: string, t: T) {
     case "frequency":
       return `${n(r.actual)} / ${n(r.target)} ${unitText(unit, t)}`;
     case "daily_check":
-      return t("detail.daysRecorded", { a: r.actual, b: r.recorded });
+      return t("detail.daysRecorded", { a: r.actual, b: r.eligible });
     case "daily_threshold":
-      return t("detail.daysOnTarget", { a: r.actual, b: r.recorded });
+      return t("detail.daysOnTarget", { a: r.actual, b: r.eligible });
     case "sum":
       return `${n(r.actual)} / ${n(r.target)} ${unitText(unit, t)}`;
   }
@@ -79,7 +72,11 @@ export function DomainList({ c, open: initialOpen }: { c: Comparison; open?: Dom
               <span className="hidden sm:block"><Bar value={score} /></span>
               <span className="flex items-center gap-2">
                 <span className="hidden sm:inline">{c.domainTrends[d.id] && <TrendChip t={c.domainTrends[d.id]} />}</span>
-                <span className={`w-10 text-right font-display text-xl font-semibold ${score === null ? "text-muted-foreground" : ""}`}>{fmtScore(score)}</span>
+                {score === null ? (
+                  <span className="text-right text-xs text-muted-foreground">{t("common.notEnoughShort")}</span>
+                ) : (
+                  <span className="w-10 text-right font-display text-xl font-semibold">{fmtScore(score)}</span>
+                )}
               </span>
               <ChevronDown className={`hidden h-4 w-4 text-muted-foreground transition-transform sm:block ${isOpen ? "rotate-180" : ""}`} />
             </button>
