@@ -115,6 +115,23 @@
   .chip-down { background: var(--color-rose-soft); color: oklch(0.45 0.08 30); }
   .chip-flat { background: var(--color-beige); color: var(--color-muted-foreground); }
   .chip-warn { background: var(--color-orange-soft); color: oklch(0.45 0.1 55); }
+  /* Planner — compact, calm blocks; type/status never conveyed by color alone */
+  .planner-week { display: grid; gap: 0.75rem; grid-template-columns: 1fr; }
+  @media (min-width: 768px) { .planner-week { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 1180px) { .planner-week { grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 0.5rem; } }
+  .planner-day { background: var(--color-cream); border: 1px solid var(--color-border); border-radius: var(--radius-lg); min-height: 6rem; }
+  .planner-day-today { border-color: var(--color-rose); box-shadow: 0 0 0 1px var(--color-rose); }
+  .planner-item { display: flex; align-items: flex-start; gap: 0.5rem; padding: 0.5rem 0.625rem; border-radius: var(--radius-sm); transition: background 150ms, opacity 150ms; }
+  .planner-item:hover { background: var(--color-background); }
+  .planner-item-soft { opacity: 0.6; }
+  .planner-check { margin-top: 0.125rem; color: var(--color-muted-foreground); flex-shrink: 0; border-radius: 999px; }
+  .planner-item[data-type="EVENT"] .planner-check, .planner-item[data-type="NOTE"] .planner-check { color: var(--color-rose); }
+  .planner-item-soft .planner-check { color: var(--color-sage); }
+  .planner-cat { font-weight: 600; }
+  .pill { border-radius: 999px; border: 1px solid var(--color-input); padding: 0.25rem 0.75rem; font-size: 0.8125rem; font-weight: 700; color: var(--color-muted-foreground); background: var(--color-cream); }
+  .pill-on { background: var(--color-primary); border-color: var(--color-primary); color: var(--color-primary-foreground); }
+  .track-focus { animation: track-pulse 1.6s ease-out 1; }
+  @keyframes track-pulse { 0% { background: var(--color-orange-soft); } 100% { background: transparent; } }
   .bar { height: 6px; border-radius: 999px; background: var(--color-beige); overflow: hidden; }
   .bar > span { display: block; height: 100%; border-radius: 999px; background: var(--color-rose); transition: width 400ms ease; }
 }

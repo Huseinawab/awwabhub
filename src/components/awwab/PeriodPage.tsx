@@ -6,6 +6,7 @@ import { useAppState } from "@/lib/awwab/store";
 import { useToday } from "@/lib/awwab/useToday";
 import { DomainList, Highlights, LifeScoreBlock } from "./Performance";
 import { PageHeader, Stepper } from "./ui";
+import { PlanVsReality } from "./Planner";
 
 export function PeriodPage({ kind }: { kind: PeriodKind }) {
   const today = useToday();
@@ -43,6 +44,7 @@ export function PeriodPage({ kind }: { kind: PeriodKind }) {
             <p className="mb-3 text-sm text-muted-foreground">{t("sec.domainsHint")}</p>
             <DomainList c={c} />
           </section>
+          <PlanVsReality period={period} today={today} />
         </>
       )}
     </div>
