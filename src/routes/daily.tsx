@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { Check, Minus } from "lucide-react";
 import { DOMAINS, activitiesAt, inDomain, type Activity } from "@/lib/awwab/config";
@@ -7,6 +7,7 @@ import { actName, domainName, targetText, unitText, useLang, useT } from "@/lib/
 import { setEntry, useAppState, type DailyEntry } from "@/lib/awwab/store";
 import { meta, useToday } from "@/lib/awwab/useToday";
 import { PageHeader, Stepper } from "@/components/awwab/ui";
+import { TodayPlan } from "@/components/awwab/Planner";
 
 export const Route = createFileRoute("/daily")({
   head: () => meta("Daily — AWWAB", "Log today's activities in under three minutes."),
@@ -24,6 +25,20 @@ function DailyPage() {
   const list = useMemo(() => activitiesAt(state.habits, date), [state.habits, date]);
   const filled = list.filter((a) => day[a.id]).length;
   const long = formatLong(date);
+  // "Track now" from Planner lands here with #act-<id>: jump to today and focus that activity — never records anything.
+  const hash = useRouterState({ select: (r) => r.location.hash });
+  useEffect(() => {
+    if (!hash.startsWith("act-")) return;
+    setDate(today);
+    const id = setTimeout(() => {
+      const el = document.getElementById(hash);
+      if (!el) return;
+      el.scrollIntoView({ block: "center", behavior: "smooth" });
+      el.classList.remove("track-focus"); void el.offsetWidth; el.classList.add("track-focus");
+      (el.querySelector("button, input") as HTMLElement | null)?.focus({ preventScroll: true });
+    }, 50);
+    return () => clearTimeout(id);
+  }, [hash, today]);
 
   return (
     <div>
@@ -34,6 +49,8 @@ function DailyPage() {
           )}
         </Stepper>
       </PageHeader>
+
+      {date === today && <div className="mb-8"><TodayPlan today={today} /></div>}
 
       {isFuture && <p className="mb-6 rounded-md bg-orange-soft px-4 py-3 text-sm">{t("daily.future")}</p>}
       {list.length === 0 ? (
@@ -67,7 +84,7 @@ function DailyPage() {
 function ActivityRow({ a, date, entry }: { a: Activity; date: string; entry: DailyEntry | undefined }) {
   const t = useT();
   return (
-    <li className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-3">
+    <li id={`act-${a.id}`} className="grid scroll-mt-24 grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-3">
       <div className="min-w-0">
         <p className="truncate font-semibold">{actName(a, t)}</p>
         <p className="text-xs text-muted-foreground">{targetText(a, t)}</p>

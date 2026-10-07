@@ -10,6 +10,7 @@ import { meta, useToday } from "@/lib/awwab/useToday";
 import { DomainList, InsightCard, LifeScoreBlock, WeekTrend } from "@/components/awwab/Performance";
 import { Segmented } from "@/components/awwab/ui";
 import { LifeProgress } from "@/components/awwab/LifeProgress";
+import { TodayPlan } from "@/components/awwab/Planner";
 
 export const Route = createFileRoute("/home")({
   head: () => meta("Home — AWWAB", "How you're doing, what changed, and what to notice."),
@@ -48,6 +49,8 @@ function HomePage() {
       <LifeScoreBlock c={c} prevLabel={t(`period.last.${kind}`)} />
 
       <LifeProgress entries={state.entries} habits={state.habits} today={today} />
+
+      <TodayPlan today={today} />
 
       {!hasAnyData && (
         <Link to="/daily" className="btn btn-primary">{t("home.openTracker")}</Link>

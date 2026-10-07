@@ -2,7 +2,7 @@ import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 
 const PUBLIC_PATHS = ["/auth", "/reset-password"];
 import { useEffect, useState, type ReactNode } from "react";
-import { BarChart3, CalendarDays, CalendarRange, Home, Lightbulb, NotebookPen, PenLine, Settings, Target } from "lucide-react";
+import { BarChart3, CalendarCheck, CalendarDays, CalendarRange, Home, Lightbulb, NotebookPen, PenLine, Settings, Target } from "lucide-react";
 import { useT } from "@/lib/awwab/i18n";
 import { LangSwitch } from "./ui";
 import { useAuthUser } from "@/lib/awwab/sync";
@@ -25,6 +25,7 @@ export function useCurrentCatState() {
 const NAV = [
   { to: "/home", key: "nav.home", icon: Home },
   { to: "/daily", key: "nav.daily", icon: PenLine },
+  { to: "/planner", key: "nav.planner", icon: CalendarCheck },
   { to: "/weekly", key: "nav.weekly", icon: BarChart3 },
   { to: "/monthly", key: "nav.monthly", icon: CalendarRange },
   { to: "/insights", key: "nav.insights", icon: Lightbulb },
@@ -93,12 +94,12 @@ export function AppShell({ children }: { children: ReactNode }) {
       {user && <div className="fixed right-3 top-14 z-30 rounded-full bg-cream/90 px-3 py-1 md:top-3"><SyncBadge /></div>}
       {user && <MigrationDialog />}
 
-      <nav className="fixed inset-x-0 bottom-0 z-20 grid grid-cols-8 border-t bg-cream/95 px-1 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden">
+      <nav className="fixed inset-x-0 bottom-0 z-20 grid grid-cols-9 border-t bg-cream/95 px-1 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden">
         {NAV.map(({ to, key, icon: Icon }) => (
           <Link
             key={to}
             to={to}
-            className="flex min-w-0 flex-col items-center gap-0.5 py-2 text-[10px] font-bold text-muted-foreground"
+            className="flex min-w-0 flex-col items-center gap-0.5 py-2 text-[9px] font-bold text-muted-foreground"
             activeProps={{ className: "!text-foreground" }}
           >
             <Icon className="h-5 w-5" />
