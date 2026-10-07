@@ -67,6 +67,29 @@ export interface Review {
   updatedAt: string;
 }
 
+export type PlannerType = "EVENT" | "TASK" | "PLAN" | "NOTE";
+export type PlannerCategory = "ACADEMIC" | "ORGANIZATION" | "CAREER" | "HEALTH" | "FINANCE" | "PERSONAL" | "SOCIAL" | "LIFE_MANAGEMENT";
+export type PlannerStatus = "PLANNED" | "COMPLETED" | "CANCELLED";
+/** Intention, never behavior: planner items are not scoring evidence. date = null → Inbox. */
+export interface PlannerItem {
+  id: string;
+  title: string;
+  description: string;
+  type: PlannerType;
+  category: PlannerCategory;
+  date: string | null;
+  startTime: string | null; // HH:MM
+  endTime: string | null;
+  status: PlannerStatus;
+  goalId: string | null;
+  projectId: string | null;
+  milestoneId: string | null;
+  activityId: string | null;
+  createdAt: string;
+  updatedAt: string;
+  completedAt: string | null;
+}
+
 export interface AppState {
   version: 1;
   entries: Entries;
@@ -75,10 +98,11 @@ export interface AppState {
   milestones: Milestone[];
   reviews: Review[];
   habits: Habit[];
+  plannerItems: PlannerItem[];
 }
 
 const KEY = "awwab:v1";
-const EMPTY: AppState = { version: 1, entries: {}, goals: [], projects: [], milestones: [], reviews: [], habits: systemHabits() };
+const EMPTY: AppState = { version: 1, entries: {}, goals: [], projects: [], milestones: [], reviews: [], habits: systemHabits(), plannerItems: [] };
 
 const arr = <X>(x: unknown): X[] => (Array.isArray(x) ? (x as X[]) : []);
 const validHabit = (h: Habit) => !!h && typeof h.id === "string" && Array.isArray(h.versions) && h.versions.length > 0 && h.versions.every((v) => isDomainId(v.domain));
@@ -97,6 +121,7 @@ function parseState(p: any): AppState {
     milestones: arr(p?.milestones),
     reviews: arr(p?.reviews),
     habits: habits.length ? habits : systemHabits(),
+    plannerItems: arr<PlannerItem>(p?.plannerItems).filter((x) => !!x && typeof x.id === "string" && typeof x.title === "string"),
   };
 }
 
@@ -113,7 +138,7 @@ function load() {
 
 /** True when the device holds any user-entered data. */
 export const hasLocalData = (s: AppState) =>
-  Object.keys(s.entries).length > 0 || s.goals.length > 0 || s.reviews.length > 0 || s.habits.some((h) => !h.isSystem || h.versions.length > 1);
+  Object.keys(s.entries).length > 0 || s.goals.length > 0 || s.reviews.length > 0 || s.plannerItems.length > 0 || s.habits.some((h) => !h.isSystem || h.versions.length > 1);
 
 /** Replace everything with a state loaded from the account (does not trigger a re-upload). */
 export function replaceState(raw: unknown) {
@@ -322,4 +347,38 @@ export function rebalanceDomain(domain: DomainId, today: string) {
       return withVersion(h, today, { weight: w });
     }),
   });
+}
+
+
+// ---------- Planner (intention only — never touches entries, milestones or scores) ----------
+export type PlannerInput = Partial<Omit<PlannerItem, "createdAt" | "updatedAt">> & { title: string };
+
+export function savePlannerItem(input: PlannerInput) {
+  const s = getState();
+  const title = input.title.trim();
+  if (!title) return null;
+  if (input.id && s.plannerItems.some((x) => x.id === input.id)) {
+    commit({ ...s, plannerItems: s.plannerItems.map((x) => (x.id === input.id ? { ...x, ...input, title, updatedAt: now() } : x)) });
+    return input.id;
+  }
+  const item: PlannerItem = {
+    description: "", type: "PLAN", category: "PERSONAL", date: null, startTime: null, endTime: null, status: "PLANNED",
+    goalId: null, projectId: null, milestoneId: null, activityId: null, completedAt: null,
+    ...input, id: uid(), title, createdAt: now(), updatedAt: now(),
+  };
+  commit({ ...s, plannerItems: [...s.plannerItems, item] });
+  return item.id;
+}
+
+export function setPlannerStatus(id: string, status: PlannerStatus) {
+  const s = getState();
+  commit({
+    ...s,
+    plannerItems: s.plannerItems.map((x) => (x.id === id ? { ...x, status, completedAt: status === "COMPLETED" ? now() : null, updatedAt: now() } : x)),
+  });
+}
+
+export function deletePlannerItem(id: string) {
+  const s = getState();
+  commit({ ...s, plannerItems: s.plannerItems.filter((x) => x.id !== id) });
 }
