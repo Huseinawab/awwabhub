@@ -19,3 +19,4 @@
 - `noUncheckedIndexedAccess` is off: config lookups by known IDs made it pure noise.
 - Cat mascot state comes only from `resolveCatState()` in `src/lib/branding/catStates.ts`, fed by the existing Life Score (current week); `AwwabCat` maps five states to normalized illustration assets, shared with the dynamic favicon to keep branding consistent.
 - Planner items (`plannerItems` in AppState, derivations in `src/lib/awwab/planner.ts`) record intention only; they never write tracking entries or feed calc.ts, so plans cannot inflate Life Score.
+- Mobile navigation is isolated in `MobileNavigation` with primary links and a controlled overflow popover; desktop navigation remains in AppShell so mobile simplification does not change desktop access.
