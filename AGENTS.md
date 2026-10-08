@@ -18,3 +18,4 @@
 - Pages render client-side only (AppShell mount gate) because they depend on local date and localStorage.
 - `noUncheckedIndexedAccess` is off: config lookups by known IDs made it pure noise.
 - Cat mascot state comes only from `resolveCatState()` in `src/lib/branding/catStates.ts`, fed by the existing Life Score (current week); `AwwabCat` maps five states to normalized illustration assets, shared with the dynamic favicon to keep branding consistent.
+- Planner items (`plannerItems` in AppState, derivations in `src/lib/awwab/planner.ts`) record intention only; they never write tracking entries or feed calc.ts, so plans cannot inflate Life Score.

@@ -8,6 +8,7 @@ import { saveReview, useAppState } from "@/lib/awwab/store";
 import { meta, useToday } from "@/lib/awwab/useToday";
 import { domainName, useLang, useT } from "@/lib/awwab/i18n";
 import { TrendChip, fmtScore, PageHeader, Stepper } from "@/components/awwab/ui";
+import { PlanVsReality } from "@/components/awwab/Planner";
 
 export const Route = createFileRoute("/review")({
   head: () => meta("Monthly Review — AWWAB", "Look back, understand, reflect and choose your next focus."),
@@ -110,6 +111,9 @@ function ReviewPage() {
           </ul>
         </section>
       </div>
+
+      <PlanVsReality period={month} today={today} />
+
 
       <section>
         <h2 className="text-h2 mb-3">{t("review.goals")}</h2>
