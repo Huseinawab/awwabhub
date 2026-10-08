@@ -13,6 +13,7 @@ import { useAppState } from "@/lib/awwab/store";
 import { useToday } from "@/lib/awwab/useToday";
 import { resolveCatState } from "@/lib/branding/catStates";
 import { AwwabLogo, useDynamicFavicon } from "@/components/branding/AwwabLogo";
+import { MobileNavigation } from "./MobileNavigation";
 
 /** Current state of the companion cat, from this week's Life Score (same number Home shows by default). */
 export function useCurrentCatState() {
@@ -94,19 +95,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       {user && <div className="fixed right-3 top-14 z-30 rounded-full bg-cream/90 px-3 py-1 md:top-3"><SyncBadge /></div>}
       {user && <MigrationDialog />}
 
-      <nav className="fixed inset-x-0 bottom-0 z-20 grid grid-cols-9 border-t bg-cream/95 px-1 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden">
-        {NAV.map(({ to, key, icon: Icon }) => (
-          <Link
-            key={to}
-            to={to}
-            className="flex min-w-0 flex-col items-center gap-0.5 py-2 text-[9px] font-bold text-muted-foreground"
-            activeProps={{ className: "!text-foreground" }}
-          >
-            <Icon className="h-5 w-5" />
-            <span className="w-full truncate text-center">{t(key)}</span>
-          </Link>
-        ))}
-      </nav>
+      <MobileNavigation />
     </div>
   );
 }

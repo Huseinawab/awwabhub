@@ -29,6 +29,7 @@ const en = {
   "pl.important": "Important this week", "pl.goals": "Your active goals", "pl.addToWeek": "Add to this week", "pl.pickDay": "Pick a day",
   "pl.linked": "Linked: {x}", "pl.trackHint": "Completing a plan doesn't record the activity. Use Track now to log what really happened.",
   // navigation
+  "nav.more": "More", "nav.mobile": "Main navigation",
   "nav.home": "Home", "nav.daily": "Daily", "nav.weekly": "Weekly", "nav.monthly": "Monthly", "nav.insights": "Insights",
   "nav.goals": "Goals", "nav.review": "Review", "nav.calendar": "Calendar", "nav.settings": "Settings",
   "app.tagline": "simple to use, deep underneath", "common.loading": "Loading",
@@ -194,6 +195,7 @@ const id: Record<Key, string> = {
   "pl.important": "Penting minggu ini", "pl.goals": "Tujuan aktifmu", "pl.addToWeek": "Tambahkan ke minggu ini", "pl.pickDay": "Pilih hari",
   "pl.linked": "Tertaut: {x}", "pl.trackHint": "Menyelesaikan rencana tidak mencatat aktivitas. Pakai Catat sekarang untuk mencatat yang benar-benar terjadi.",
   "nav.home": "Beranda", "nav.daily": "Harian", "nav.weekly": "Mingguan", "nav.monthly": "Bulanan", "nav.insights": "Wawasan",
+  "nav.more": "Lainnya", "nav.mobile": "Navigasi utama",
   "nav.goals": "Tujuan", "nav.review": "Review", "nav.calendar": "Kalender", "nav.settings": "Pengaturan",
   "app.tagline": "sederhana dipakai, dalam di baliknya", "common.loading": "Memuat",
   "common.save": "Simpan", "common.cancel": "Batal", "common.close": "Tutup", "common.saved": "Tersimpan.", "common.prev": "Sebelumnya", "common.next": "Berikutnya",
