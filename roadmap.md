@@ -5,4 +5,4 @@
 - [x] Editable habits: add/edit/archive/reactivate, versioned history, Settings page
 - [x] Tests for habit history + language
 - [x] Restore original watercolor cat illustrations with five Life Score states and verify page rendering.
-- [ ] Simplify mobile navigation into five main destinations and a More menu; verify opening, dismissal, and destination links.
+- [x] Simplify mobile navigation into five main destinations and a More menu; automated tests verify opening, dismissal, destination links, and translations (signed-in preview check unavailable: external unmanaged auth).
